@@ -26,6 +26,7 @@ namespace Character
 
         private Vector2 InputVector = Vector2.zero;
         private Vector3 MoveDirection = Vector3.zero;
+        private Vector3 NextPositionCheck = Vector3.zero;
 
         //Animator Hashes
         private readonly int MovementXHash = Animator.StringToHash("MovementX");
@@ -120,8 +121,30 @@ namespace Character
 
             Vector3 movementDirection = MoveDirection * (currentSpeed * Time.deltaTime);
 
-            //PlayerTransform.position += movementDirection;
-            PlayerNavMeshAgent.Move(movementDirection);
+            NextPositionCheck = transform.position + MoveDirection;
+
+            if(NavMesh.SamplePosition(NextPositionCheck, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+            {
+                transform.position += movementDirection;
+            }
+
+
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!collision.collider.CompareTag("Ground") || !PlayerController.IsJumping) return;
+
+            PlayerController.IsJumping = false;
+            PlayerAnimator.SetBool(IsJumpingHash, false);
+        }
+
+        private void OnDrawGizmos()
+        {
+            if(NextPositionCheck != Vector3.zero)
+            {
+                Gizmos.DrawWireSphere(NextPositionCheck, 0.5f);
+            }
         }
     }
 }
