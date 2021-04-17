@@ -14,6 +14,15 @@ namespace Weapons
         {
             onWeaponEquiped?.Invoke(weaponComponent);
         }
+        
+        public delegate void OnHealthInitEvent(HealthComponent healthComponent);
+
+        public static event OnHealthInitEvent OnHealthComponent;
+
+        public static void Invoke_OnHealthInitEvent(HealthComponent HealthComponent)
+        {
+            OnHealthComponent?.Invoke(HealthComponent);
+        }
 
     }
 }

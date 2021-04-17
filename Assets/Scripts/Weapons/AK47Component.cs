@@ -27,6 +27,7 @@ namespace Weapons
                     WeaponStats.FireDistance, WeaponStats.WeaponHitLayers)) return;
             
                 HitLocation = hit.point;
+                TakeDamage(hit);
             
                 Vector3 hitDirection = hit.point - MainCamera.transform.position;
                 Debug.DrawRay(MainCamera.transform.position, hitDirection.normalized * WeaponStats.FireDistance, Color.red);
@@ -39,6 +40,12 @@ namespace Weapons
             }
 
           
+        }
+
+        private void TakeDamage(RaycastHit hit)
+        {
+            IDamagable damagable = hit.collider.GetComponent<IDamagable>();
+            damagable?.TakeDamage(WeaponInformation.Damage);
         }
 
         private void OnDrawGizmos()

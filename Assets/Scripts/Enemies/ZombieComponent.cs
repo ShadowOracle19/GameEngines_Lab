@@ -7,6 +7,9 @@ using UnityEngine.AI;
 [RequireComponent(typeof(StateMachine))]
 public class ZombieComponent : MonoBehaviour
 {
+    public float ZombieDamage => damage;
+    [SerializeField] private float damage;
+
     public NavMeshAgent zombieMeshAgent { get; private set; }
 
     public Animator ZombieAnimator { get; private set; }
